@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDL Practice Test - Clase B</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    header, main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    .language-selector button {
+      margin: 5px;
+      padding: 10px 20px;
+    }
+    .module-button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .question-box {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .option {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .correct {
+      background-color: #c8e6c9;
+    }
+    .incorrect {
+      background-color: #ffcdd2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">CDL Practice Test - Clase B</h1>
+    <div class="language-selector">
+      <button onclick="setLanguage('en')">English</button>
+      <button onclick="setLanguage('es')">Español</button>
+    </div>
+  </header>
+  <main>
+    <div id="moduleSelection">
+      <button class="module-button" onclick="startModule('general')">General Knowledge</button>
+      <button class="module-button" onclick="startModule('airbrakes')">Air Brakes</button>
+    </div>
+    <div id="questionContainer"></div>
+  </main>
+
+  <script>
+    let language = 'en';
+
+    const questions = {
+      general: [
+        {
+          en: {
+            q: "What should you do before starting a trip?",
+            a: ["Inspect the vehicle", "Call dispatch", "Turn on the radio"],
+            c: 0
+          },
+          es: {
+            q: "¿Qué debe hacer antes de comenzar un viaje?",
+            a: ["Inspeccionar el vehículo", "Llamar a la central", "Encender la radio"],
+            c: 0
+          }
+        },
+        {
+          en: {
+            q: "How often must you inspect your cargo?",
+            a: ["Only at the start", "Every 150 miles or 3 hours", "Only at rest stops"],
+            c: 1
+          },
+          es: {
+            q: "¿Con qué frecuencia debe inspeccionar su carga?",
+            a: ["Solo al inicio", "Cada 150 millas o 3 horas", "Solo en las paradas"],
+            c: 1
+          }
+        }
+      ],
+      airbrakes: [
+        {
+          en: {
+            q: "What is the purpose of the air compressor?",
+            a: ["Cool the engine", "Pump air into storage tanks", "Lubricate brake pads"],
+            c: 1
+          },
+          es: {
+            q: "¿Cuál es el propósito del compresor de aire?",
+            a: ["Enfriar el motor", "Bombear aire a los tanques", "Lubricar las pastillas de freno"],
+            c: 1
+          }
+        }
+      ]
+    };
+
+    function setLanguage(lang) {
+      language = lang;
+      document.getElementById("title").textContent =
+        lang === 'en' ? "CDL Practice Test - Class B" : "Práctica de examen CDL - Clase B";
+    }
+
+    function startModule(moduleKey) {
+      const container = document.getElementById("questionContainer");
+      container.innerHTML = '';
+      questions[moduleKey].forEach((qObj, index) => {
+        const q = qObj[language];
+        const box = document.createElement("div");
+        box.className = "question-box";
+
+        const question = document.createElement("p");
+        question.textContent = `${index + 1}. ${q.q}`;
+        box.appendChild(question);
+
+        q.a.forEach((optionText, i) => {
+          const opt = document.createElement("div");
+          opt.className = "option";
+          opt.textContent = optionText;
+          opt.onclick = () => {
+            if (i === q.c) {
+              opt.classList.add("correct");
+            } else {
+              opt.classList.add("incorrect");
+              const correctOpt = opt.parentNode.querySelectorAll(".option")[q.c];
+              correctOpt.classList.add("correct");
+            }
+            Array.from(opt.parentNode.querySelectorAll(".option")).forEach(el => {
+              el.onclick = null;
+            });
+          };
+          box.appendChild(opt);
+        });
+        container.appendChild(box);
+      });
+    }
+  </script>
+</body>
+</html>
