@@ -1,4 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Contenido omitido aquí para abreviar, ya incluido en el canvas -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDL Practice Test - Clase B</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #eef2f5;
+    }
+    header, main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    header img {
+      height: 60px;
+    }
+    .language-selector button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .module-button {
+      display: block;
+      margin: 10px 0;
+      padding: 12px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .module-button:hover {
+      background: #004c99;
+    }
+    .question-box {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .option {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s, border 0.3s;
+    }
+    .option:hover {
+      background-color: #f0f8ff;
+    }
+    .correct {
+      background-color: #c8e6c9;
+      border-color: #2e7d32;
+    }
+    .incorrect {
+      background-color: #ffcdd2;
+      border-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="CDL Practice Logo">
+    <h1 id="title">CDL Practice Test - Clase B</h1>
+  </header>
+  <div class="language-selector">
+    <button onclick="setLanguage('en')">English</button>
+    <button onclick="setLanguage('es')">Español</button>
+  </div>
+  <main>
+    <div id="moduleSelection">
+      <button class="module-button" onclick="startModule('general')">General Knowledge</button>
+      <button class="module-button" onclick="startModule('airbrakes')">Air Brakes</button>
+      <button class="module-button" onclick="startModule('hazmat')">Hazardous Materials</button>
+    </div>
+    <div id="questionContainer"></div>
+  </main>
+
+  <script>
+    let language = 'en';
+
+    const questions = {
+      general: [...],
+      airbrakes: [...],
+      hazmat: [...]
+    };
+
+    function setLanguage(lang) {
+      language = lang;
+      document.getElementById("title").textContent =
+        lang === 'en' ? "CDL Practice Test - Class B" : "Práctica de examen CDL - Clase B";
+    }
+
+    function startModule(moduleKey) {
+      const container = document.getElementById("questionContainer");
+      container.innerHTML = '';
+      questions[moduleKey].forEach((qObj, index) => {
+        const q = qObj[language];
+        const box = document.createElement("div");
+        box.className = "question-box";
+
+        const question = document.createElement("p");
+        question.textContent = `${index + 1}. ${q.q}`;
+        box.appendChild(question);
+
+        q.a.forEach((optionText, i) => {
+          const opt = document.createElement("div");
+          opt.className = "option";
+          opt.textContent = optionText;
+          opt.onclick = () => {
+            if (i === q.c) {
+              opt.classList.add("correct");
+            } else {
+              opt.classList.add("incorrect");
+              const correctOpt = opt.parentNode.querySelectorAll(".option")[q.c];
+              correctOpt.classList.add("correct");
+            }
+            Array.from(opt.parentNode.querySelectorAll(".option")).forEach(el => {
+              el.onclick = null;
+            });
+          };
+          box.appendChild(opt);
+        });
+        container.appendChild(box);
+      });
+    }
+  </script>
+</body>
 </html>
